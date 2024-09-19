@@ -16,7 +16,6 @@ import priority4 from '../assets/icons_FEtask/SVG - Urgent Priority colour.svg'
 import Card1 from './Card1';
 import Card2 from './Card2';
 import { fetchTicketsAndUsers } from '../api/Api'
-import profile from '../assets/icons_FEtask/profile.jpg'
 
 const statuses = ['Backlog', 'Todo', 'In progress', 'Done', 'Cancelled'];
 const statusIcons = [backlog, todo, inProgress, done, cancelled];
@@ -36,6 +35,23 @@ const priorityNames = {
     3: 'High',
     4: 'Urgent',
 };
+
+const getInitials = (name) => {
+    const [firstName, lastName] = name.split(' ');
+    const firstInitial = firstName?.charAt(0) || '';
+    const lastInitial = lastName?.charAt(0) || '';
+    return `${firstInitial}${lastInitial}`.toUpperCase();
+};
+
+const getRandomColor = () => {
+    const letters = '0123456789ABCDEF';
+    let color = '#';
+    for (let i = 0; i < 6; i++) {
+        color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+};
+
 
 const Board = () => {
 
@@ -161,6 +177,8 @@ const Board = () => {
                 const priority = tickets[0]?.priority;
                 const priorityIcon = priorityIcons[priority];
                 const priorityName = priorityNames[priority];
+                const initials = getInitials(key); 
+                const backgroundColor = getRandomColor();
 
                 return (
                     <div key={key} className='column'>
@@ -169,7 +187,22 @@ const Board = () => {
                                 {
                                     groupBy === "User" ? (
                                         <>
-                                            <img src={profile} alt='profile' className="profile" />                
+                                            <div
+                                                style={{
+                                                    backgroundColor: backgroundColor,
+                                                    color: '#fff',
+                                                    fontWeight: 'bold',
+                                                    display: 'flex',
+                                                    justifyContent: 'center',
+                                                    alignItems: 'center',
+                                                    borderRadius: '50%',
+                                                    width: '26px',
+                                                    height: '26px',
+                                                    fontSize: '14px',
+                                                }}
+                                            >
+                                                {initials}
+                                            </div>
                                             <p>{key}</p>
                                             <p className='count'>{tickets.length}</p>
                                         </>
